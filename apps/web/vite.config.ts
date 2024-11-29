@@ -10,6 +10,7 @@ export default defineConfig({
       '~': path.resolve(__dirname, './src'),
     },
   },
+  // In dev mode, will proxy all requests to prevent cors issues
   server: {
     proxy: {
       '/trpc': {
