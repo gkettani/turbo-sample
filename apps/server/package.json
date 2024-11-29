@@ -2,7 +2,8 @@
   "name": "server",
   "type": "module",
   "scripts": {
-    "dev": "bun run --hot src/index.ts"
+    "dev": "bun run --hot src/index.ts",
+    "start": "NODE_ENV=production bun run src/index.ts"
   },
   "dependencies": {
     "@hono/trpc-server": "^0.3.2",

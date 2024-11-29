@@ -2,5 +2,12 @@
   "extends": ["ultracite"],
   "files": {
     "ignore": ["tailwind.config.js", "node_modules"]
+  },
+  "linter": {
+    "rules": {
+      "style": {
+        "useNamingConvention": "off"
+      }
+    }
   }
 }
