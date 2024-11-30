@@ -7,6 +7,13 @@
     "rules": {
       "style": {
         "useNamingConvention": "off"
+      },
+      "suspicious": {
+        "noEmptyInterface": "off"
+      },
+      "correctness": {
+        "noUnusedVariables": "off",
+        "noUndeclaredVariables": "off"
       }
     }
   }
