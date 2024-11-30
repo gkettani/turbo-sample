@@ -16,7 +16,11 @@ primary_region = 'cdg'
   min_machines_running = 0
   processes = ['app']
 
+[http_service.concurrency]
+  type = "requests"
+
 [[vm]]
-  memory = '1gb'
+  size = "shared-cpu-1x"
+  memory = '256mb'
   cpu_kind = 'shared'
   cpus = 1
