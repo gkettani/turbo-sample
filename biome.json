@@ -5,6 +5,9 @@
   },
   "linter": {
     "rules": {
+      "complexity": {
+        "noForEach": "off"
+      },
       "style": {
         "useNamingConvention": "off"
       },
@@ -14,6 +17,9 @@
       "correctness": {
         "noUnusedVariables": "off",
         "noUndeclaredVariables": "off"
+      },
+      "nursery": {
+        "useConsistentMemberAccessibility": "off"
       }
     }
   }
