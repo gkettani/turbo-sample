@@ -3,7 +3,11 @@ import {
   OpenTelemetryPrometheusExporter,
 } from '../metrics/exporters';
 import { ObservabilityClient } from './client';
-import type { MetricsConfig, ObservabilityConfig } from './types';
+import type {
+  MetricsConfig,
+  MetricsExporter,
+  ObservabilityConfig,
+} from './types';
 
 export class ObservabilityClientBuilder {
   private config: Partial<ObservabilityConfig> = {};
@@ -27,7 +31,7 @@ export class ObservabilityClientBuilder {
     if (!this.config.globalAttributes) {
       this.config.globalAttributes = {};
     }
-    this.config.globalAttributes = attributes;
+    this.config.globalAttributes = { ...attributes };
     return this;
   }
 
@@ -45,20 +49,56 @@ export class ObservabilityClientBuilder {
 }
 
 class MetricsConfigBuilder {
-  private config: Partial<MetricsConfig>;
+  private readonly exporters: MetricsExporter[] = [];
+  private enabled = true;
 
+  /**
+   * Enables or disables metrics collection
+   */
+  setEnabled(enabled: boolean): this {
+    this.enabled = enabled;
+    return this;
+  }
+
+  /**
+   * Adds a console exporter for OpenTelemetry metrics
+   */
   addOpenTelemetryConsoleExporter(): this {
-    this.config.exporters?.push(new OpenTelemetryConsoleExporter());
+    if (!this.hasExporterOfType(OpenTelemetryConsoleExporter)) {
+      this.exporters.push(new OpenTelemetryConsoleExporter());
+    }
     return this;
   }
-
+  /**
+   * Adds a Prometheus exporter for OpenTelemetry metrics
+   */
   addOpenTelemetryPrometheusExporter(): this {
-    this.config.exporters?.push(new OpenTelemetryPrometheusExporter());
+    if (!this.hasExporterOfType(OpenTelemetryPrometheusExporter)) {
+      this.exporters.push(new OpenTelemetryPrometheusExporter());
+    }
     return this;
   }
 
+  /**
+   * Checks if an exporter of a specific type already exists
+   */
+  private hasExporterOfType(
+    type: new (...args: unknown[]) => MetricsExporter
+  ): boolean {
+    return this.exporters.some((exporter) => exporter instanceof type);
+  }
+
+  /**
+   * Builds and returns the final metrics configuration
+   * @throws Error if no exporters are configured
+   */
   build(): MetricsConfig {
-    this.config.enabled = true;
-    return this.config as MetricsConfig;
+    if (this.exporters.length === 0) {
+      throw new Error('At least one exporter must be configured');
+    }
+    return Object.freeze({
+      enabled: this.enabled,
+      exporters: [...this.exporters],
+    });
   }
 }

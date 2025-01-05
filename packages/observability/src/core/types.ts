@@ -25,5 +25,5 @@ export interface SignalConfig {
 }
 
 export interface MetricsConfig extends SignalConfig {
-  exporters?: MetricsExporter[];
+  exporters: MetricsExporter[];
 }
