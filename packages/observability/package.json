@@ -1,11 +1,13 @@
 {
-    "name": "@repo/observability",
-    "version": "1.0.0",
-    "main": "index.ts",
-    "peerDependencies": {
-      "typescript": "^5.0.0"
-    },
-    "dependencies": {
-    }
+  "name": "@repo/observability",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@opentelemetry/exporter-metrics-otlp-proto": "^0.57.0",
+    "@opentelemetry/exporter-prometheus": "^0.57.0",
+    "@opentelemetry/sdk-metrics": "^1.30.0"
   }
-  
+}

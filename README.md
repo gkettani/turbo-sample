@@ -8,3 +8,13 @@ flyctl deploy --config apps/server/fly.toml --dockerfile  apps/server/Dockerfile
 
 - Start the server:
 docker run -p 3000:3000 -d -e NODE_ENV="production" turbo-sample-server
+
+- Add handling for observability (very minimalistic + support for better stack)
+- Add handling of posthog, how to use it and why use it 
+- Add handling of Auth.js + frontend
+- Add handling of a proper UI library with fully designed and reusable components 
+- Proper structure of the API (protected routes etc...)
+- Proper frontend structure using tanstack router/query/tables etc...
+
+## References
+- [Biome usage](https://biomejs.dev/guides/getting-started/#usage)
