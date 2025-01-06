@@ -13,6 +13,7 @@ export interface ObservabilityConfig {
   /** Global attributes to be used with all signals */
   globalAttributes?: Record<string, string>;
   metrics?: MetricsConfig;
+  logs?: LogsConfig;
 }
 
 export interface MetricsExporter {
@@ -26,4 +27,10 @@ export interface SignalConfig {
 
 export interface MetricsConfig extends SignalConfig {
   exporters: MetricsExporter[];
+}
+
+export type LogLevel = 'fatal' | 'error' | 'warn' | 'info' | 'debug' | 'trace';
+
+export interface LogsConfig extends SignalConfig {
+  level: LogLevel;
 }

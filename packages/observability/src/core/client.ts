@@ -3,11 +3,13 @@ import {
   ATTR_SERVICE_NAME,
   ATTR_SERVICE_VERSION,
 } from '@opentelemetry/semantic-conventions';
+import { LogsManager } from '../logs/manager';
 import { MetricsManager } from '../metrics/manager';
 import type { ObservabilityConfig } from './types';
 
 export class ObservabilityClient {
   private readonly metricsManager: MetricsManager;
+  private readonly logsManager: LogsManager;
   private readonly config: ObservabilityConfig;
   private readonly resource: Resource;
 
@@ -22,6 +24,14 @@ export class ObservabilityClient {
         this.resource
       );
       this.metricsManager.init();
+    }
+
+    if (this.config.logs?.enabled) {
+      this.logsManager = new LogsManager(
+        this.config.logs,
+        this.resource
+      )
+      this.logsManager.init();
     }
   }
 
@@ -52,5 +62,9 @@ export class ObservabilityClient {
       this.config.serviceName, // 'instrumentation-scope-name'
       this.config.version // 'instrumentation-scope-version'
     );
+  }
+
+  get logger() {
+    return this.logsManager.logger;
   }
 }

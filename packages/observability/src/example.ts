@@ -11,6 +11,7 @@ const observability = new ObservabilityClientBuilder()
     team: 'payments',
     host: 'host-name',
   })
+  .withLogger((config) => config.setEnabled(true).setLevel('info'))
   .withMetrics((config) =>
     config
       .addOpenTelemetryConsoleExporter()
@@ -18,4 +19,4 @@ const observability = new ObservabilityClientBuilder()
   )
   .build();
 
-export const { metrics } = observability;
+export const { logger, metrics } = observability;

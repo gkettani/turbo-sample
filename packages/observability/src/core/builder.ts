@@ -1,9 +1,12 @@
 import {
   OpenTelemetryConsoleExporter,
+  OpenTelemetryOTLPExporter,
   OpenTelemetryPrometheusExporter,
 } from '../metrics/exporters';
 import { ObservabilityClient } from './client';
 import type {
+  LogLevel,
+  LogsConfig,
   MetricsConfig,
   MetricsExporter,
   ObservabilityConfig,
@@ -43,6 +46,14 @@ export class ObservabilityClientBuilder {
     return this;
   }
 
+  withLogger(
+    configurator: (config: LoggerConfigBuilder) => LoggerConfigBuilder
+  ): this {
+    const builder = new LoggerConfigBuilder();
+    this.config.logs = configurator(builder).build();
+    return this;
+  }
+
   build(): ObservabilityClient {
     return new ObservabilityClient(this.config as ObservabilityConfig);
   }
@@ -78,6 +89,15 @@ class MetricsConfigBuilder {
     }
     return this;
   }
+  /**
+   * Adds a OTLP exporter for OpenTelemetry metrics
+   */
+  addOpenTelemetryOTLPExporter(): this {
+    if (!this.hasExporterOfType(OpenTelemetryOTLPExporter)) {
+      this.exporters.push(new OpenTelemetryOTLPExporter());
+    }
+    return this;
+  }
 
   /**
    * Checks if an exporter of a specific type already exists
@@ -99,6 +119,34 @@ class MetricsConfigBuilder {
     return Object.freeze({
       enabled: this.enabled,
       exporters: [...this.exporters],
+    });
+  }
+}
+
+class LoggerConfigBuilder {
+  private level: LogLevel;
+  private enabled: boolean;
+
+  /**
+   * Enables or disables metrics collection
+   */
+  setEnabled(enabled: boolean): this {
+    this.enabled = enabled;
+    return this;
+  }
+
+  /**
+   * Set log level
+   */
+  setLevel(level: LogLevel): this {
+    this.level = level;
+    return this;
+  }
+
+  build(): LogsConfig {
+    return Object.freeze({
+      enabled: this.enabled,
+      level: this.level,
     });
   }
 }
