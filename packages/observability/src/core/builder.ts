@@ -125,15 +125,7 @@ class MetricsConfigBuilder {
 
 class LoggerConfigBuilder {
   private level: LogLevel;
-  private enabled: boolean;
-
-  /**
-   * Enables or disables metrics collection
-   */
-  setEnabled(enabled: boolean): this {
-    this.enabled = enabled;
-    return this;
-  }
+  private enabled = true;
 
   /**
    * Set log level

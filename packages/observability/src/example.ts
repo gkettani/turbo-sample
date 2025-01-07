@@ -11,7 +11,7 @@ const observability = new ObservabilityClientBuilder()
     team: 'payments',
     host: 'host-name',
   })
-  .withLogger((config) => config.setEnabled(true).setLevel('info'))
+  .withLogger((config) => config.setLevel('info'))
   .withMetrics((config) =>
     config
       .addOpenTelemetryConsoleExporter()

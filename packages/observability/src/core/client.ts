@@ -3,13 +3,13 @@ import {
   ATTR_SERVICE_NAME,
   ATTR_SERVICE_VERSION,
 } from '@opentelemetry/semantic-conventions';
-import { LogsManager } from '../logs/manager';
+import pino from 'pino';
 import { MetricsManager } from '../metrics/manager';
 import type { ObservabilityConfig } from './types';
 
 export class ObservabilityClient {
   private readonly metricsManager: MetricsManager;
-  private readonly logsManager: LogsManager;
+  private readonly loggerProvider: pino.Logger;
   private readonly config: ObservabilityConfig;
   private readonly resource: Resource;
 
@@ -26,13 +26,11 @@ export class ObservabilityClient {
       this.metricsManager.init();
     }
 
-    if (this.config.logs?.enabled) {
-      this.logsManager = new LogsManager(
-        this.config.logs,
-        this.resource
-      )
-      this.logsManager.init();
-    }
+    this.loggerProvider = pino({
+      level: this.config.logs?.level || 'info',
+      // Default attributes that are added as a child logger to each log line
+      base: this.config.logs?.defaultAttributes,
+    });
   }
 
   private validateConfig(config: ObservabilityConfig): void {
@@ -65,6 +63,6 @@ export class ObservabilityClient {
   }
 
   get logger() {
-    return this.logsManager.logger;
+    return this.loggerProvider;
   }
 }
